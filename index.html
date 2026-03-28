@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container1">
+        <div>
+            <h1 class="p">PLAYER1's EMOJI</h1>
+         <input type="text" id="str1" placeholder="enter emoji type">
+    
+         <select id="select1">
+         </select>
+        </div>
+        <div>
+        <h1 class="p">PLAYER2's EMOJI</h1>
+         <input type="text" id="str2" placeholder="enter emoji type">
+         <select id="select2">
+         </select>
+        </div> 
+        <button id="firstbutton">PLAY</button> 
+    </div>
+    <script>
+        const select1=document.getElementById("select1");
+        const select2=document.getElementById("select2");
+        const el1=document.getElementById("str1");
+        const el2=document.getElementById("str2");
+        // const str1=el1.value;
+        // const str2=el2.value;
+        function conv_to_str(codePoint){
+            let ans="";
+                 const arr=codePoint.split(" "); //return arr of string seperated by space
+                 for(let i=0;i<arr.length;i++){
+                     ans+="&#x"; //for hexadecimal values
+                     ans+=arr[i];
+                     ans+=";";
+                 }
+                 return ans;
+        }
+         async function getData(str,id){
+               const res_obj= await fetch(`https://emoji-api.com/emojis?search=${str}&access_key=78839c162ec55ba6deba980c70edd3cfbf1eeaf9`);
+               const data= await res_obj.json();
+               const select=document.getElementById(id);
+               select.innerHTML=" ";
+               for(let i=0;i<data.length;i++){
+                  const el=document.createElement('option');
+                  el.value=conv_to_str(data[i]["codePoint"]);
+                  el.innerHTML=conv_to_str(data[i]["codePoint"]); //not option.value ,option.innerHTML
+                  select.appendChild(el);
+               }
+         }
+         el1.addEventListener('input',async()=>{
+            return await getData(el1.value,"select1");
+         })
+         el2.addEventListener('input',async()=>{
+            return await getData(el2.value,"select2");
+         })
+         const button=document.getElementById("firstbutton");
+         button.addEventListener('click',()=>{
+                   if(select1.value==select2.value){
+                    alert("select different non-empty emojis");
+                    return;
+                   }
+                   localStorage.setItem("player1", select1.value);
+                   localStorage.setItem("player2", select2.value);
+
+                return window.location.href="game2.html";
+         })
+    </script>
+</body>
+</html>
