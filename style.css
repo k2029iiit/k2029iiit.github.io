@@ -38,6 +38,11 @@
     background-color: black; 
     
 }
+@media(orientation: portrait){
+        .container1{
+         flex-direction:column;
+        }
+}
 .result{
       color:azure;
       background-color: red;
